@@ -1,0 +1,6 @@
+{
+  "name": "CertiFlow",
+  "description": "Certificate generation app with template upload, CSV parsing, and QR code master lists.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
