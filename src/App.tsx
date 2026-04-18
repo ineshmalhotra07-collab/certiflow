@@ -8,6 +8,7 @@ import { sendCertificateEmail } from './emailService';
 import { LandingPage } from './components/LandingPage';
 import { Dashboard } from './components/Dashboard';
 import { ParticleBackground } from './components/ParticleBackground';
+import { PaperButton } from './components/PaperButton';
 
 // Configure PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -368,7 +369,7 @@ export default function App() {
 
   if (currentView === 'landing') {
     return (
-      <div className="relative overflow-hidden bg-slate-950">
+      <div className="relative overflow-hidden bg-black">
         <ParticleBackground lightEmission={true} glowIntensity={1} />
         <LandingPage onGetStarted={() => setCurrentView('generator')} />
       </div>
@@ -380,54 +381,60 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+    <div className="min-h-screen bg-black text-slate-200 font-sans relative">
+      <ParticleBackground lightEmission={true} glowIntensity={0.4} />
+      
+      <header className="bg-black/60 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex justify-between items-center relative z-10">
         <div className="max-w-5xl flex items-center gap-2 cursor-pointer" onClick={() => setCurrentView('landing')}>
-          <FileType className="w-6 h-6 text-blue-600" />
-          <h1 className="text-xl font-semibold tracking-tight">CertiFlow</h1>
+          <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)]">
+            <FileType className="w-5 h-5 text-white" />
+          </div>
+          <h1 className="text-xl font-bold tracking-tight text-white">CertiFlow</h1>
         </div>
-        <button onClick={() => setCurrentView('dashboard')} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+        <button onClick={() => setCurrentView('dashboard')} className="text-sm font-medium text-slate-400 hover:text-emerald-400 transition-colors">
           Dashboard
         </button>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-12">
+      <main className="max-w-5xl mx-auto px-6 py-12 relative z-10">
         {/* Stepper */}
-        <div className="flex items-center justify-between mb-12 overflow-x-auto pb-4">
+        <div className="flex items-center justify-between mb-12 overflow-x-auto pb-4 no-scrollbar">
           {[1, 2, 3, 4, 5, 6].map((s) => (
             <div key={s} className="flex items-center">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-medium transition-colors min-w-[40px] shrink-0 ${
-                step >= s ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 min-w-[40px] shrink-0 ${
+                step >= s 
+                  ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(6,78,59,0.4)]' 
+                  : 'bg-slate-800 text-slate-500 border border-white/5'
               }`}>
                 {s}
               </div>
               {s < 6 && (
-                <div className={`w-10 h-1 mx-2 sm:w-16 sm:mx-4 rounded transition-colors shrink-0 ${
-                  step > s ? 'bg-blue-600' : 'bg-gray-200'
+                <div className={`w-10 h-1 mx-2 sm:w-16 sm:mx-4 rounded transition-all duration-500 shrink-0 ${
+                  step > s ? 'bg-emerald-600 shadow-[0_0_10px_rgba(6,78,59,0.3)]' : 'bg-slate-800'
                 }`} />
               )}
             </div>
           ))}
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-black/40 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/10 p-8">
           {step === 1 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-semibold mb-2">Upload Special Features</h2>
-                <p className="text-gray-500">Do you have any special features you would want to add to the certificate which are not present in the excel file? (e.g., Signatures, Logos, Stamps). You can upload multiple.</p>
+                <h2 className="text-2xl font-bold text-white mb-2">Upload Special Features</h2>
+                <p className="text-slate-400">Add signatures, logos, or stamps to your certificates. You can place these markers later.</p>
               </div>
 
               <div className="space-y-4">
                 <label 
-                  className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                  className="flex flex-col items-center justify-center w-full h-40 border-2 border-white/10 border-dashed rounded-xl cursor-pointer bg-black/40 hover:bg-black/60 hover:border-emerald-500/50 transition-all duration-300 group"
                   onDrop={handleSpecialDrop}
                   onDragOver={handleDragOver}
                 >
                   <div className="flex flex-col items-center justify-center pt-5 pb-6 pointer-events-none">
-                    <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                    <p className="mb-1 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p className="text-xs text-gray-500">PNG, JPG or PDF</p>
+                    <Upload className="w-8 h-8 text-slate-500 group-hover:text-emerald-400 mb-2 transition-colors" />
+                    <p className="mb-1 text-sm text-slate-400 font-medium transition-colors group-hover:text-slate-200">Click to upload or drag features</p>
+                    <p className="text-xs text-slate-500">PNG, JPG or PDF</p>
                   </div>
                   <input type="file" className="hidden" accept=".png,.jpg,.jpeg,.pdf" multiple onChange={handleSpecialFeatureUpload} />
                 </label>
@@ -435,11 +442,11 @@ export default function App() {
                 {specialFeatures.length > 0 && (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
                     {specialFeatures.map((sf, idx) => (
-                      <div key={sf.id} className="relative group border rounded-lg p-2 bg-white shadow-sm flex flex-col items-center justify-center">
-                        <img src={sf.preview} alt={`Special Feature ${idx + 1}`} className="max-h-24 object-contain" />
+                      <div key={sf.id} className="relative group border border-white/10 rounded-xl p-3 bg-black/40 shadow-lg flex flex-col items-center justify-center transition-all hover:border-emerald-500/30">
+                        <img src={sf.preview} alt={`Special Feature ${idx + 1}`} className="max-h-24 object-contain brightness-95" />
                         <button 
                           onClick={() => removeSpecialFeature(sf.id)}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="absolute -top-2 -right-2 bg-red-500/80 hover:bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-all shadow-lg"
                         >
                           ✕
                         </button>
@@ -448,20 +455,20 @@ export default function App() {
                   </div>
                 )}
                 
-                <div className="flex justify-between pt-4">
+                <div className="flex justify-between items-center pt-4">
                   <button 
                     onClick={() => setStep(2)}
-                    className="text-gray-600 hover:text-gray-900 font-medium px-4 py-2"
+                    className="text-slate-400 hover:text-white font-medium px-4 py-2 transition-colors"
                   >
                     {specialFeatures.length > 0 ? "Done with specials" : "Skip this step"}
                   </button>
                   {specialFeatures.length > 0 && (
-                    <button 
+                    <PaperButton 
                       onClick={() => setStep(2)}
-                      className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-                    >
-                      Next Step <ArrowRight className="w-4 h-4" />
-                    </button>
+                      text="Next Step"
+                      width={160}
+                      height={46}
+                    />
                   )}
                 </div>
               </div>
@@ -471,89 +478,88 @@ export default function App() {
           {step === 2 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-semibold mb-2">Upload Template</h2>
-                <p className="text-gray-500">Upload your certificate design (PNG, JPG, or PDF) and click to add markers where data should appear.</p>
+                <h2 className="text-2xl font-bold text-white mb-2">Upload Template</h2>
+                <p className="text-slate-400">Upload your certificate design and click to add markers where data should appear.</p>
               </div>
 
               {!templatePreview ? (
                 <label 
-                  className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                  className="flex flex-col items-center justify-center w-full h-64 border-2 border-white/10 border-dashed rounded-xl cursor-pointer bg-black/40 hover:bg-black/60 hover:border-emerald-500/50 transition-all duration-300 group"
                   onDrop={handleTemplateDrop}
                   onDragOver={handleDragOver}
                 >
                   <div className="flex flex-col items-center justify-center pt-5 pb-6 pointer-events-none">
-                    <Upload className="w-10 h-10 text-gray-400 mb-3" />
-                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p className="text-xs text-gray-500">PNG, JPG or PDF</p>
+                    <Upload className="w-10 h-10 text-slate-500 group-hover:text-emerald-400 mb-3 transition-colors" />
+                    <p className="mb-2 text-sm text-slate-400"><span className="font-semibold">Click to upload template</span> or drag and drop</p>
+                    <p className="text-xs text-slate-500">PNG, JPG or PDF</p>
                   </div>
                   <input type="file" className="hidden" accept=".png,.jpg,.jpeg,.pdf" onChange={handleTemplateUpload} />
                 </label>
               ) : (
                 <div className="space-y-4">
-                  {specialFeatures.length > 0 && (
-                    <div className="flex flex-col items-center justify-center mb-4 gap-4 bg-blue-50 p-3 rounded-lg border border-blue-100">
-                      <div className="flex gap-4">
-                        <button
-                          onClick={() => setPlacementMode('text')}
-                          className={`px-4 py-2 rounded-lg font-medium transition-colors ${placementMode === 'text' ? 'bg-blue-600 text-white shadow' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
-                        >
-                          Add Text Markers
-                        </button>
-                        <button
-                          onClick={() => setPlacementMode('special')}
-                          className={`px-4 py-2 rounded-lg font-medium transition-colors ${placementMode === 'special' ? 'bg-blue-600 text-white shadow' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
-                        >
-                          Place Special Feature
-                        </button>
-                      </div>
-                      
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm text-gray-700 font-medium">Font:</span>
-                        <select 
-                          value={selectedFont} 
-                          onChange={e => setSelectedFont(e.target.value)}
-                          className="border-gray-300 rounded-md py-1.5 px-3 text-sm focus:ring-blue-500 focus:border-blue-500 border bg-white"
-                          style={{ fontFamily: selectedFont }}
-                        >
-                          {FONTS.map(f => <option key={f} value={f} style={{ fontFamily: f }}>{f}</option>)}
-                        </select>
-                      </div>
-
-                      {placementMode === 'special' && (
-                        <div className="flex flex-col gap-2 bg-white p-3 rounded-lg border shadow-sm w-64 text-sm mt-3 sm:mt-0">
-                          <label className="flex flex-col gap-1">
-                            <span className="font-semibold text-gray-700">Select feature to place:</span>
-                            <select 
-                              className="border-gray-300 rounded-md py-1 px-2 border"
-                              value={activeSpecialFeatureIndex}
-                              onChange={(e) => setActiveSpecialFeatureIndex(Number(e.target.value))}
-                            >
-                              {specialFeatures.map((sf, idx) => (
-                                <option key={sf.id} value={idx}>Special Feature #{idx + 1}</option>
-                              ))}
-                            </select>
-                          </label>
-                          <label className="flex flex-col gap-1 mt-2">
-                            <span className="font-semibold text-gray-700">Display Size (px): {activeSpecialFeatureSize}</span>
-                            <input 
-                              type="range" 
-                              min="20" 
-                              max="400" 
-                              value={activeSpecialFeatureSize}
-                              onChange={(e) => setActiveSpecialFeatureSize(Number(e.target.value))}
-                              className="w-full accent-blue-600"
-                            />
-                          </label>
-                        </div>
-                      )}
+                  <div className="flex flex-col items-center justify-center mb-4 gap-4 bg-emerald-500/5 p-4 rounded-xl border border-emerald-500/20">
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() => setPlacementMode('text')}
+                        className={`px-4 py-2 rounded-lg font-medium transition-all ${placementMode === 'text' ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(6,78,59,0.4)]' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+                      >
+                        Add Text Markers
+                      </button>
+                      <button
+                        onClick={() => setPlacementMode('special')}
+                        disabled={specialFeatures.length === 0}
+                        className={`px-4 py-2 rounded-lg font-medium transition-all ${placementMode === 'special' ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(6,78,59,0.4)]' : 'bg-slate-800 text-slate-400 hover:bg-slate-700 disabled:opacity-30'}`}
+                      >
+                        Place Special Feature
+                      </button>
                     </div>
-                  )}
-                  <div className={`relative inline-block border rounded-lg overflow-hidden shadow-sm ${placementMode === 'special' ? 'cursor-alias' : 'cursor-crosshair'}`}>
+                    
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm text-slate-300 font-medium font-mono">Font Family:</span>
+                      <select 
+                        value={selectedFont} 
+                        onChange={e => setSelectedFont(e.target.value)}
+                        className="border-white/10 rounded-lg py-1.5 px-3 text-sm focus:ring-emerald-500 focus:border-emerald-500 border bg-slate-800 text-white outline-none"
+                        style={{ fontFamily: selectedFont }}
+                      >
+                        {FONTS.map(f => <option key={f} value={f} style={{ fontFamily: f }}>{f}</option>)}
+                      </select>
+                    </div>
+
+                    {placementMode === 'special' && (
+                      <div className="flex flex-col gap-2 bg-slate-800 p-4 rounded-xl border border-white/10 shadow-xl w-64 text-sm mt-3 sm:mt-0">
+                        <label className="flex flex-col gap-1">
+                          <span className="font-semibold text-slate-300">Select feature:</span>
+                          <select 
+                            className="bg-slate-900 border-white/10 rounded-lg py-1 px-2 border text-slate-200 outline-none"
+                            value={activeSpecialFeatureIndex}
+                            onChange={(e) => setActiveSpecialFeatureIndex(Number(e.target.value))}
+                          >
+                            {specialFeatures.map((sf, idx) => (
+                              <option key={sf.id} value={idx}>Special Feature #{idx + 1}</option>
+                            ))}
+                          </select>
+                        </label>
+                        <label className="flex flex-col gap-1 mt-2">
+                          <span className="font-semibold text-slate-300">Display Size: {activeSpecialFeatureSize}px</span>
+                          <input 
+                            type="range" 
+                            min="20" 
+                            max="400" 
+                            value={activeSpecialFeatureSize}
+                            onChange={(e) => setActiveSpecialFeatureSize(Number(e.target.value))}
+                            className="w-full accent-emerald-600"
+                          />
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                  <div className={`relative inline-block border border-white/10 rounded-xl overflow-hidden shadow-2xl ${placementMode === 'special' ? 'cursor-alias' : 'cursor-crosshair'}`}>
                     <img 
                       ref={imageRef}
                       src={templatePreview} 
                       alt="Template preview" 
-                      className="max-w-full h-auto"
+                      className="max-w-full h-auto brightness-90"
                       onClick={handleImageClick}
                     />
                     {markers.map((m, i) => {
@@ -563,7 +569,7 @@ export default function App() {
                       return (
                       <div 
                         key={m.id}
-                        className="absolute border-2 border-red-500 bg-red-500/10 shadow-sm overflow-hidden flex items-center justify-center cursor-move pointer-events-auto"
+                        className="absolute border-2 border-emerald-500 bg-emerald-500/10 shadow-[0_0_10px_rgba(6,78,59,0.3)] overflow-hidden flex items-center justify-center cursor-move pointer-events-auto group"
                         style={{ 
                           left: `${m.x * 100}%`, top: `${m.y * 100}%`,
                           width: `${mWidth}%`, height: `${mHeight}%`,
@@ -591,9 +597,9 @@ export default function App() {
                            window.addEventListener('mouseup', onMouseUp);
                         }}
                       >
-                        <span className="text-gray-800 text-sm opacity-80 whitespace-nowrap pointer-events-none" style={{ fontFamily: selectedFont, fontSize: '100%' }}>Sample {i+1}</span>
+                        <span className="text-white text-sm font-semibold whitespace-nowrap pointer-events-none drop-shadow-md" style={{ fontFamily: selectedFont }}>Sample {i+1}</span>
                         <div 
-                          className="absolute bottom-0 right-0 w-4 h-4 bg-red-600 cursor-nwse-resize pointer-events-auto"
+                          className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-600 cursor-nwse-resize pointer-events-auto shadow-lg"
                           onMouseDown={(e) => {
                              e.stopPropagation();
                              e.preventDefault();
@@ -617,100 +623,102 @@ export default function App() {
                              window.addEventListener('mouseup', onMouseUp);
                           }}
                         />
+                        <button 
+                           onClick={(e) => { e.stopPropagation(); setMarkers(prev => prev.filter(p => p.id !== m.id)); }}
+                           className="absolute top-0 right-0 p-1 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 text-white"
+                        >
+                           <span className="text-[10px]">✕</span>
+                        </button>
                       </div>
                     )})}
                     {specialMarkers.map((sm, i) => (
                       <div 
                         key={sm.id}
-                        className="absolute bg-purple-600/20 border-2 border-purple-600 border-dashed transform -translate-x-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center"
+                        className="absolute bg-emerald-600/30 border-2 border-emerald-500 border-dashed transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto flex items-center justify-center cursor-pointer group"
                         style={{ left: `${sm.x * 100}%`, top: `${sm.y * 100}%`, width: `${Math.max(20, sm.size / 2)}px`, height: `${Math.max(20, sm.size / 2)}px` }}
+                        onClick={(e) => { e.stopPropagation(); setSpecialMarkers(prev => prev.filter(p => p.id !== sm.id)); }}
                       >
-                        <span className="text-xs font-bold text-purple-700 leading-none">★</span>
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-purple-600 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap shadow-sm">
+                        <span className="text-xs font-bold text-white drop-shadow-md">★</span>
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-emerald-600 text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap shadow-xl">
                           {`Special #${sm.index + 1}`}
+                        </div>
+                        <div className="absolute inset-0 border-4 border-red-500 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                           <span className="text-[10px] text-white bg-red-500 px-1 rounded">Remove</span>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center bg-slate-800/50 p-4 rounded-xl border border-white/5">
                     <div className="flex gap-4">
                       <button 
                         onClick={() => setStep(1)}
-                        className="text-sm text-gray-500 hover:text-gray-700 font-medium"
+                        className="text-sm text-slate-400 hover:text-white font-medium transition-colors"
                       >
                         <ArrowLeft className="w-4 h-4 inline mr-1" />
-                        Back to Special Feature
+                        Back to Specials
                       </button>
                       <button 
                         onClick={() => { setTemplatePreview(null); setMarkers([]); setTemplateFile(null); setSpecialMarkers([]); }}
-                        className="text-sm text-gray-500 hover:text-gray-700 ml-4"
+                        className="text-sm text-slate-400 hover:text-white transition-colors ml-4"
                       >
                         Different template
                       </button>
-                      {(markers.length > 0 || specialMarkers.length > 0) && (
-                        <button 
-                          onClick={() => { setMarkers([]); setSpecialMarkers([]); }}
-                          className="text-sm text-red-500 hover:text-red-700"
-                        >
-                          Clear all markers
-                        </button>
-                      )}
                     </div>
-                    <button 
+                    <PaperButton 
                       onClick={() => setStep(3)}
                       disabled={markers.length === 0}
-                      className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      Next Step <ArrowRight className="w-4 h-4" />
-                    </button>
+                      text="Next Step"
+                      width={160}
+                      height={46}
+                    />
                   </div>
                 </div>
               )}
             </div>
           )}
 
-          {step === 2 && (
+          {step === 3 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-semibold mb-2">Upload Data</h2>
-                <p className="text-gray-500">
+                <h2 className="text-2xl font-bold text-white mb-2">Upload Data</h2>
+                <p className="text-slate-400">
                   Upload a CSV or Excel file containing the participant data.
                 </p>
               </div>
 
               {!participants.length ? (
                 <label 
-                  className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                  className="flex flex-col items-center justify-center w-full h-64 border-2 border-white/10 border-dashed rounded-xl cursor-pointer bg-black/40 hover:bg-black/60 hover:border-emerald-500/50 transition-all duration-300 group"
                   onDrop={handleDataDrop}
                   onDragOver={handleDragOver}
                 >
                   <div className="flex flex-col items-center justify-center pt-5 pb-6 pointer-events-none">
-                    <Upload className="w-10 h-10 text-gray-400 mb-3" />
-                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p className="text-xs text-gray-500">CSV or Excel (.xlsx)</p>
+                    <Upload className="w-10 h-10 text-slate-500 group-hover:text-emerald-400 mb-3 transition-colors" />
+                    <p className="mb-2 text-sm text-slate-400"><span className="font-semibold">Click to upload data</span> or drag and drop</p>
+                    <p className="text-xs text-slate-500">CSV or Excel (.xlsx)</p>
                   </div>
                   <input type="file" className="hidden" accept=".csv,.xlsx,.xls" onChange={handleDataUpload} />
                 </label>
               ) : (
                 <div className="space-y-6">
-                  <div className="bg-gray-50 border rounded-xl overflow-hidden">
-                    <div className="px-4 py-3 border-b bg-gray-100/50 flex justify-between items-center">
-                      <h3 className="font-medium text-gray-700">Data Preview ({participants.length} rows)</h3>
+                  <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-xl">
+                    <div className="px-4 py-3 border-b border-white/5 bg-slate-800/20 flex justify-between items-center">
+                      <h3 className="font-medium text-slate-300">Data Preview ({participants.length} rows)</h3>
                       <button 
                         onClick={() => { setParticipants([]); setDataFile(null); setMappings({}); }}
-                        className="text-sm text-blue-600 hover:text-blue-800"
+                        className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
                       >
                         Upload different file
                       </button>
                     </div>
                     <div className="overflow-x-auto max-h-96">
-                      <table className="w-full text-sm text-left text-gray-500">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0 shadow-sm z-10">
+                      <table className="w-full text-sm text-left text-slate-400">
+                        <thead className="text-xs text-slate-300 uppercase bg-black/60 sticky top-0 shadow-sm z-10">
                           <tr>
                             {headers.map((h, i) => (
                               <th 
                                 key={i} 
-                                className="px-6 py-3 transition-colors whitespace-nowrap text-gray-700 font-semibold"
+                                className="px-6 py-3 transition-colors whitespace-nowrap font-bold"
                               >
                                 {h}
                               </th>
@@ -719,7 +727,7 @@ export default function App() {
                         </thead>
                         <tbody>
                           {participants.slice(0, 10).map((row, i) => (
-                            <tr key={i} className="bg-white border-b hover:bg-gray-50">
+                            <tr key={i} className="bg-transparent border-b border-white/5 hover:bg-white/5 transition-colors">
                               {headers.map((h, j) => (
                                 <td 
                                   key={j} 
@@ -733,26 +741,26 @@ export default function App() {
                         </tbody>
                       </table>
                       {participants.length > 10 && (
-                        <div className="text-center py-3 text-sm text-gray-500 bg-white border-t">
+                        <div className="text-center py-3 text-sm text-slate-500 bg-black/40 border-t border-white/5">
                           Showing first 10 rows...
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center bg-slate-800/30 p-4 rounded-xl border border-white/5">
                     <button 
                       onClick={() => setStep(2)}
-                      className="flex items-center gap-2 text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg transition-colors"
+                      className="flex items-center gap-2 text-slate-400 hover:text-white px-4 py-2 rounded-lg transition-colors"
                     >
                       <ArrowLeft className="w-4 h-4" /> Back
                     </button>
-                    <button 
+                    <PaperButton 
                       onClick={() => setStep(4)}
-                      className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-                    >
-                      Next Step <ArrowRight className="w-4 h-4" />
-                    </button>
+                      text="Next Step"
+                      width={160}
+                      height={46}
+                    />
                   </div>
                 </div>
               )}
@@ -762,29 +770,29 @@ export default function App() {
           {step === 4 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-semibold mb-2">Map Data Fields</h2>
-                <p className="text-gray-500">Match each marker on your template with a column from your data file.</p>
+                <h2 className="text-2xl font-bold text-white mb-2">Map Data Fields</h2>
+                <p className="text-slate-400">Match each marker on your template with a column from your data file.</p>
                 {specialFeatures.length > 0 && specialMarkers.length > 0 && (
-                  <div className="mt-4 p-3 bg-purple-50 text-purple-700 border border-purple-200 rounded-lg flex items-center gap-2 text-sm">
+                  <div className="mt-4 p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl flex items-center gap-2 text-sm shadow-lg">
                     <CheckCircle2 className="w-5 h-5" />
-                    <span>{specialMarkers.length} special marker(s) have been successfully placed and linked! They will be automatically rendered on generation.</span>
+                    <span className="font-medium">{specialMarkers.length} special marker(s) successfully placed and synchronized!</span>
                   </div>
                 )}
               </div>
               
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                <div className="divide-y divide-gray-100">
+              <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+                <div className="divide-y divide-white/5">
                   {markers.map((m, index) => (
-                    <div key={m.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
+                    <div key={m.id} className="p-5 flex items-center justify-between hover:bg-white/5 transition-colors">
                       <div className="flex items-center gap-4">
-                        <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
+                        <div className="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center font-bold shadow-lg">
                           {index + 1}
                         </div>
-                        <span className="font-medium text-gray-700">Marker {index + 1}</span>
+                        <span className="font-bold text-slate-200">Marker {index + 1}</span>
                       </div>
-                      <div className="w-64">
+                      <div className="w-72">
                         <select 
-                          className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full bg-slate-900 border-white/10 rounded-xl shadow-lg focus:ring-emerald-500 focus:border-emerald-500 text-slate-200 py-2.5 px-4 outline-none border"
                           value={mappings[m.id] || ''}
                           onChange={(e) => setMappings({ ...mappings, [m.id]: e.target.value })}
                         >
@@ -797,16 +805,16 @@ export default function App() {
                     </div>
                   ))}
                   
-                  <div className="p-4 flex items-center justify-between hover:bg-gray-50 bg-indigo-50 border-t-2 border-indigo-100">
+                  <div className="p-5 flex items-center justify-between bg-emerald-600/5 border-t-2 border-emerald-500/20">
                     <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">
+                      <div className="w-10 h-10 bg-slate-700 text-emerald-400 rounded-xl flex items-center justify-center font-bold shadow-lg border border-emerald-500/30">
                         @
                       </div>
-                      <span className="font-medium text-indigo-900">Email Address (Optional)</span>
+                      <span className="font-bold text-emerald-300">Email Address Mapping</span>
                     </div>
-                    <div className="w-64">
+                    <div className="w-72">
                       <select 
-                        className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full bg-slate-900 border-emerald-500/20 rounded-xl shadow-lg focus:ring-emerald-500 focus:border-emerald-500 text-slate-200 py-2.5 px-4 outline-none border"
                         value={emailConfig.column}
                         onChange={(e) => setEmailConfig({ ...emailConfig, column: e.target.value })}
                       >
@@ -821,20 +829,20 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center pt-4">
+              <div className="flex justify-between items-center pt-4 bg-slate-800/30 p-4 rounded-xl border border-white/5">
                 <button 
                   onClick={() => setStep(3)}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg transition-colors"
+                  className="flex items-center gap-2 text-slate-400 hover:text-white px-4 py-2 rounded-lg transition-colors"
                 >
-                  <ArrowLeft className="w-4 h-4" /> Back
+                  <ArrowLeft className="w-4 h-4" /> Back to Data
                 </button>
-                <button 
+                <PaperButton 
                   onClick={() => setStep(5)}
                   disabled={Object.values(mappings).length !== markers.length || Object.values(mappings).some(v => !v)}
-                  className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Review & Generate <ArrowRight className="w-4 h-4" />
-                </button>
+                  text="Review & Generate"
+                  width={200}
+                  height={50}
+                />
               </div>
             </div>
           )}
@@ -844,50 +852,53 @@ export default function App() {
               {!generateProgress ? (
                 <>
                   <div className="max-w-md mx-auto space-y-4">
-                    <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <CheckCircle2 className="w-10 h-10 text-blue-600" />
+                    <div className="w-24 h-24 bg-emerald-600/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/20 shadow-[0_0_30px_rgba(6,78,59,0.15)]">
+                      <CheckCircle2 className="w-12 h-12 text-emerald-400" />
                     </div>
-                    <h2 className="text-3xl font-semibold">Ready to Generate</h2>
-                    <p className="text-gray-500 text-lg">
-                      We'll generate <strong>{participants.length}</strong> certificates using your template.
+                    <h2 className="text-3xl font-bold text-white">Ready to Generate</h2>
+                    <p className="text-slate-400 text-lg">
+                      Preparing <strong>{participants.length}</strong> premium certificates for generation.
                     </p>
                   </div>
 
-                  <div className="flex justify-center gap-4 pt-4">
+                  <div className="flex justify-center items-center gap-8 pt-4">
                     <button 
                       onClick={() => setStep(4)}
                       disabled={isGenerating}
-                      className="px-6 py-3 text-gray-600 hover:bg-gray-100 rounded-xl font-medium transition-colors disabled:opacity-50"
+                      className="px-6 py-3 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl font-medium transition-all disabled:opacity-30"
                     >
                       Go Back
                     </button>
-                    <button 
+                    <PaperButton 
                       onClick={generateCertificates}
                       disabled={isGenerating}
-                      className="flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-sm"
-                    >
-                      Generate Certificates
-                    </button>
+                      text="Generate Certificates"
+                      width={240}
+                      height={60}
+                    />
                   </div>
                 </>
               ) : (
-                <div className="max-w-xl mx-auto space-y-6">
-                  <h2 className="text-2xl font-semibold">Generating Certificates...</h2>
-                  <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
+                <div className="max-w-xl mx-auto space-y-8 bg-black/40 backdrop-blur-2xl p-8 rounded-3xl border border-white/10 shadow-2xl">
+                  <h2 className="text-2xl font-bold text-white">Crafting Certificates...</h2>
+                  <div className="w-full bg-slate-900 rounded-full h-4 relative overflow-hidden ring-1 ring-white/10 shadow-inner">
                     <div 
-                      className="bg-blue-600 h-4 rounded-full transition-all duration-300"
+                      className="bg-emerald-600 h-full rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(6,78,59,0.5)] relative"
                       style={{ width: `${(generateProgress.current / generateProgress.total) * 100}%` }}
-                    />
+                    >
+                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+                    </div>
                   </div>
-                  <p className="text-gray-600">
-                    Generating: <strong>{generateProgress.name}</strong> ({generateProgress.current} of {generateProgress.total})
-                  </p>
+                  <div className="flex justify-between items-center text-sm font-medium">
+                    <span className="text-slate-400">Processing: <span className="text-emerald-400">{generateProgress.name}</span></span>
+                    <span className="text-white bg-emerald-600/30 px-2 py-1 rounded-md">{generateProgress.current} / {generateProgress.total}</span>
+                  </div>
                   <div className="pt-4">
                     <button 
                       onClick={() => abortControllerRef.current?.abort()}
-                      className="text-red-500 hover:text-red-700 font-medium"
+                      className="text-red-400 hover:text-red-300 font-bold text-sm transition-colors hover:underline"
                     >
-                      Cancel Generation
+                      ABORT GENERATION
                     </button>
                   </div>
                 </div>
@@ -898,27 +909,33 @@ export default function App() {
           {step === 6 && results && (
             <div className="space-y-8 text-center py-8">
               <div className="max-w-md mx-auto space-y-4">
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${results.failed && results.failed.length > 0 ? 'bg-orange-50' : 'bg-green-50'}`}>
-                  <CheckCircle2 className={`w-10 h-10 ${results.failed && results.failed.length > 0 ? 'text-orange-600' : 'text-green-600'}`} />
+                <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl ${results.failed && results.failed.length > 0 ? 'bg-orange-500/10 border border-orange-500/20' : 'bg-green-500/10 border border-green-500/20'}`}>
+                  <CheckCircle2 className={`w-12 h-12 ${results.failed && results.failed.length > 0 ? 'text-orange-400' : 'text-green-400'}`} />
                 </div>
-                <h2 className="text-3xl font-semibold">Generation Complete!</h2>
-                <p className="text-gray-600 text-lg">
-                  <strong>{results.count}</strong> certificates generated successfully.
+                <h2 className="text-4xl font-black text-white uppercase tracking-tighter">Success!</h2>
+                <p className="text-slate-400 text-lg">
+                  <strong className="text-white">{results.count}</strong> certificates generated with precision.
                   {results.failed && results.failed.length > 0 && (
-                     <span className="text-red-500 ml-2"><strong>{results.failed.length}</strong> failed.</span>
+                     <span className="text-red-400 ml-2 font-bold">— {results.failed.length} failed artifacts.</span>
                   )}
                 </p>
               </div>
 
               {results.failed && results.failed.length > 0 && (
-                <div className="max-w-xl mx-auto bg-red-50 text-red-700 p-4 rounded-lg text-left overflow-y-auto max-h-48 border border-red-100">
-                  <h3 className="font-semibold mb-2">Failed Certificates:</h3>
-                  <ul className="list-disc pl-5 space-y-1 text-sm">
+                <div className="max-w-xl mx-auto bg-red-500/5 text-red-300 p-6 rounded-2xl text-left overflow-y-auto max-h-48 border border-red-500/20 shadow-inner">
+                  <h3 className="font-bold mb-2 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-red-400 rounded-full animate-pulse" />
+                    Failed Certificates:
+                  </h3>
+                  <ul className="pl-4 space-y-1 text-sm font-mono list-none">
                     {results.failed.map((fc, i) => (
-                      <li key={i}><strong>{fc.name}</strong>: {fc.reason}</li>
+                      <li key={i} className="flex gap-2">
+                        <span className="text-red-500 opacity-50">›</span>
+                        <span><strong className="text-white">{fc.name}</strong>: {fc.reason}</span>
+                      </li>
                     ))}
                   </ul>
-                  <button className="mt-4 text-sm font-medium hover:underline text-red-800">Retry Failed Only</button>
+                  <button className="mt-4 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">Retry Failed Protocols</button>
                 </div>
               )}
 
@@ -926,36 +943,38 @@ export default function App() {
                 <a 
                   href={results.combinedUrl}
                   download
-                  className="flex flex-col items-center p-6 border-2 border-gray-100 rounded-2xl hover:border-blue-100 hover:bg-blue-50 transition-all group"
+                  className="flex flex-col items-center p-8 bg-black/40 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all group relative overflow-hidden shadow-xl"
                 >
-                  <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <Download className="w-6 h-6" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-600/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:bg-emerald-600/10 transition-colors" />
+                  <div className="w-16 h-16 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(6,78,59,0.3)]">
+                    <Download className="w-7 h-7" />
                   </div>
-                  <h3 className="font-semibold text-lg mb-1">Combined PDF</h3>
-                  <p className="text-sm text-gray-500 text-center">Contains all generated certificates grouped into a single PDF document.</p>
+                  <h3 className="font-bold text-xl text-white mb-2">Combined Vault</h3>
+                  <p className="text-sm text-slate-400 text-center leading-relaxed">Single master document containing all generated certificates in perfect sequence.</p>
                 </a>
 
                 <a 
                   href={results.zipUrl}
                   download
-                  className="flex flex-col items-center p-6 border-2 border-gray-100 rounded-2xl hover:border-blue-100 hover:bg-blue-50 transition-all group"
+                  className="flex flex-col items-center p-8 bg-black/40 backdrop-blur-xl border border-white/5 rounded-3xl hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all group relative overflow-hidden shadow-xl"
                 >
-                  <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <FileArchive className="w-6 h-6" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-600/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:bg-emerald-600/10 transition-colors" />
+                  <div className="w-16 h-16 bg-slate-700 text-emerald-400 border border-emerald-500/30 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
+                    <FileArchive className="w-7 h-7" />
                   </div>
-                  <h3 className="font-semibold text-lg mb-1">ZIP Archive</h3>
-                  <p className="text-sm text-gray-500 text-center">Download all individual certificate PDFs in a single ZIP file.</p>
+                  <h3 className="font-bold text-xl text-white mb-2">Artifact Library</h3>
+                  <p className="text-sm text-slate-400 text-center leading-relaxed">Compressed package with individual high-fidelity certificate files for distribution.</p>
                 </a>
               </div>
 
-              <div className="flex flex-col items-center gap-4 pt-8">
+              <div className="flex flex-col items-center gap-6 pt-8">
                 {emailConfig.column && (
-                  <button 
+                  <PaperButton 
                     onClick={() => setStep(7)}
-                    className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-medium hover:bg-indigo-700 transition-colors shadow-sm"
-                  >
-                    Send Certificates by Email
-                  </button>
+                    text="Deliver via Email"
+                    width={220}
+                    height={54}
+                  />
                 )}
                 <button 
                   onClick={() => {
@@ -971,9 +990,9 @@ export default function App() {
                     setParticipants([]);
                     setResults(null);
                   }}
-                  className="text-blue-600 hover:text-blue-800 font-medium"
+                  className="text-slate-400 hover:text-white font-bold tracking-widest text-xs uppercase transition-colors"
                 >
-                  Create another batch
+                  Initiate New Batch +
                 </button>
               </div>
             </div>
@@ -982,51 +1001,56 @@ export default function App() {
           {step === 7 && results && (
             <div className="space-y-6 max-w-3xl mx-auto py-4 transition-all duration-200">
               <div>
-                <h2 className="text-2xl font-semibold mb-2">Send Emails via EmailJS</h2>
-                <p className="text-gray-500">Configure your EmailJS credentials and email template to deliver the certificates.</p>
+                <h2 className="text-2xl font-bold text-white mb-2">Send Emails via EmailJS</h2>
+                <p className="text-slate-400">Configure your EmailJS credentials and email template to deliver the certificates.</p>
               </div>
 
               {/* Setup Guide Collapsible */}
-              <div className="bg-white border rounded-xl overflow-hidden shadow-sm transition-all duration-200">
+              <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-xl transition-all duration-200">
                 <button 
                   onClick={() => setEmailGuideOpen(!emailGuideOpen)}
-                  className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+                  className="w-full flex justify-between items-center p-4 bg-slate-800/20 hover:bg-slate-700/30 transition-colors"
                 >
-                  <span className="font-semibold text-gray-800">EmailJS Setup Guide</span>
-                  <span className="text-gray-500 text-sm">{emailGuideOpen ? 'Hide' : 'Show'} details</span>
+                  <span className="font-bold text-slate-200 uppercase tracking-wider text-xs flex items-center gap-2">
+                    <span className="w-2 h-2 bg-emerald-500 rounded-full" />
+                    EmailJS Setup Guide
+                  </span>
+                  <span className="text-emerald-400 text-xs font-bold uppercase">{emailGuideOpen ? 'Hide' : 'Show'} details</span>
                 </button>
                 {emailGuideOpen && (
-                  <div className="p-4 bg-white border-t text-sm text-gray-600 space-y-2 leading-relaxed transition-all duration-200">
-                    <p>1. Go to <strong>emailjs.com</strong> and create a free account.</p>
-                    <p>2. Add a Gmail or Outlook service and copy the <strong>Service ID</strong>.</p>
-                    <p>3. Create an email template. Use these exact variables in your template text: <code>{`{{to_name}}`}</code>, <code>{`{{to_email}}`}</code>, <code>{`{{subject}}`}</code>, <code>{`{{message}}`}</code>.</p>
-                    <p>4. Make sure your template allows attachments. Copy the <strong>Template ID</strong>.</p>
-                    <p>5. Go to Account Settings to find your <strong>Public Key</strong>.</p>
-                    <p>6. Paste all three below and click "Test Connection" to verify.</p>
+                  <div className="p-5 bg-black/60 border-t border-white/5 text-sm text-slate-400 space-y-3 leading-relaxed transition-all duration-200 font-medium">
+                    <p className="flex gap-2"><span className="text-emerald-500 font-bold">01.</span> Go to <strong>emailjs.com</strong> and create a free account.</p>
+                    <p className="flex gap-2"><span className="text-emerald-500 font-bold">02.</span> Add a SMTP service and copy the <strong>Service ID</strong>.</p>
+                    <p className="flex gap-2"><span className="text-emerald-500 font-bold">03.</span> Build your template with variables: <code>{`{{to_name}}`}</code>, <code>{`{{to_email}}`}</code>, <code>{`{{subject}}`}</code>, <code>{`{{message}}`}</code>.</p>
+                    <p className="flex gap-2"><span className="text-emerald-500 font-bold">04.</span> Ensure attachments are enabled. Copy the <strong>Template ID</strong>.</p>
+                    <p className="flex gap-2"><span className="text-emerald-500 font-bold">05.</span> Locate your <strong>Public Key</strong> in Account Settings.</p>
                   </div>
                 )}
               </div>
 
               {/* Credentials Form */}
-              <div className="bg-white p-5 rounded-xl border shadow-sm transition-all duration-200 space-y-4">
-                <h3 className="font-semibold text-gray-800">EmailJS Credentials</h3>
+              <div className="bg-black/40 backdrop-blur-2xl p-6 rounded-2xl border border-white/10 shadow-2xl transition-all duration-200 space-y-5">
+                <h3 className="font-bold text-white flex items-center gap-2 text-sm uppercase tracking-widest">
+                   <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                   EmailJS Credentials
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-gray-600">Service ID</label>
-                    <input type="text" className="border rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200" value={emailjsCreds.serviceId} onChange={e => setEmailjsCreds({...emailjsCreds, serviceId: e.target.value})} placeholder="service_xyz123" />
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Service ID</label>
+                    <input type="text" className="bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 shadow-inner" value={emailjsCreds.serviceId} onChange={e => setEmailjsCreds({...emailjsCreds, serviceId: e.target.value})} placeholder="service_xyz123" />
                   </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-gray-600">Template ID</label>
-                    <input type="text" className="border rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200" value={emailjsCreds.templateId} onChange={e => setEmailjsCreds({...emailjsCreds, templateId: e.target.value})} placeholder="template_abc456" />
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Template ID</label>
+                    <input type="text" className="bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 shadow-inner" value={emailjsCreds.templateId} onChange={e => setEmailjsCreds({...emailjsCreds, templateId: e.target.value})} placeholder="template_abc456" />
                   </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-gray-600">Public Key</label>
-                    <input type="text" className="border rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200" value={emailjsCreds.publicKey} onChange={e => setEmailjsCreds({...emailjsCreds, publicKey: e.target.value})} placeholder="publicKey789" />
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Public Key</label>
+                    <input type="text" className="bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 shadow-inner" value={emailjsCreds.publicKey} onChange={e => setEmailjsCreds({...emailjsCreds, publicKey: e.target.value})} placeholder="publicKey789" />
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
-                  <input type="email" className="border rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 w-full sm:w-64" value={testEmail} onChange={e => setTestEmail(e.target.value)} placeholder="Your email for testing..." />
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2 border-t border-white/5 mt-4">
+                  <input type="email" className="bg-black/60 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 w-full sm:w-64" value={testEmail} onChange={e => setTestEmail(e.target.value)} placeholder="Email for testing..." />
                   <button 
                     disabled={isTesting || !emailjsCreds.serviceId || !emailjsCreds.templateId || !emailjsCreds.publicKey || !testEmail}
                     onClick={async () => {
@@ -1034,19 +1058,19 @@ export default function App() {
                       setTestResult(null);
                       try {
                         const dummyPdfBase64 = 'JVBERi0xLjcKCjEgMCBvYmogICUKPDwKIC9UeXBlIC9DYXRhbG9nCiAvUGFnZXMgMiAwIFIKPj4KZW5kb2JqCgoyIDAgb2JqCjwwCiAvVHlwZSAvUGFnZXMKIC9LaWRzIFszIDAgUl0KIC9Db3VudCAxCj4+CmVuZG9iagoKMyAwIG9iago8PAogL1R5cGUgL1BhZ2UKIC9QYXJlbnQgMiAwIFIKIC9NZWRpYUJveCBbMCAwIDYxMiA3OTJdCj4+CmVuZG9iagoKeHJlZgowIDQKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDEwIDAwMDAwIG4gCjAwMDAwMDAwNjAgMDAwMDAgbiAKMDAwMDAwMDExMyAwMDAwMCBuIAp0cmFpbGVyCjw8CiAvU2l6ZSA0CiAvUm9vdCAxIDAgUgo+PgpzdGFydHhyZWYKMTczCiUlRU9GCg==';
-                        await sendCertificateEmail(emailjsCreds.serviceId, emailjsCreds.templateId, emailjsCreds.publicKey, testEmail, 'Test User', 'Test Connection', 'This is a test connection email.', dummyPdfBase64);
+                        await sendCertificateEmail(emailjsCreds.serviceId, emailjsCreds.templateId, emailjsCreds.publicKey, testEmail, 'Tester', 'Certiflow Test', 'Connection verification email.', dummyPdfBase64);
                         setTestResult({ success: true, message: 'Connection successful' });
                       } catch (err: any) {
                         setTestResult({ success: false, message: 'Connection failed: ' + (err.text || err.message || 'Unknown error') });
                       }
                       setIsTesting(false);
                     }}
-                    className="bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 disabled:opacity-50 whitespace-nowrap outline-none"
+                    className="bg-slate-700 text-white hover:bg-slate-600 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all duration-200 disabled:opacity-30 shadow-lg"
                   >
-                    {isTesting ? 'Testing...' : 'Test Connection'}
+                    {isTesting ? 'Verifying...' : 'Test Connection'}
                   </button>
                   {testResult && (
-                    <span className={`text-sm font-medium transition-all duration-200 ${testResult.success ? 'text-green-600' : 'text-red-600'}`}>
+                    <span className={`text-xs font-bold uppercase tracking-wider transition-all duration-200 px-3 py-1 rounded-md ${testResult.success ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
                       {testResult.message}
                     </span>
                   )}
@@ -1054,72 +1078,77 @@ export default function App() {
               </div>
 
               {/* Email Content Config */}
-              <div className="bg-white p-5 rounded-xl border shadow-sm transition-all duration-200 space-y-4">
-                <h3 className="font-semibold text-gray-800">Email Contents</h3>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                  <input 
-                    type="text" 
-                    className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2 border outline-none transition-all duration-200"
-                    value={emailConfig.subject}
-                    onChange={(e) => setEmailConfig({ ...emailConfig, subject: e.target.value })}
-                    placeholder="Your Certificate"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email Body (Use [Name] to insert recipient's name)</label>
-                  <textarea 
-                    rows={4}
-                    className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2 border outline-none transition-all duration-200"
-                    value={emailConfig.body}
-                    onChange={(e) => setEmailConfig({ ...emailConfig, body: e.target.value })}
-                  />
+              <div className="bg-black/40 backdrop-blur-2xl p-6 rounded-2xl border border-white/10 shadow-2xl transition-all duration-200 space-y-5">
+                <h3 className="font-bold text-white flex items-center gap-2 text-sm uppercase tracking-widest">
+                   <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                   Email Contents
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Subject</label>
+                    <input 
+                      type="text" 
+                      className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
+                      value={emailConfig.subject}
+                      onChange={(e) => setEmailConfig({ ...emailConfig, subject: e.target.value })}
+                      placeholder="Your Certificate of Achievement"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Email Body (Use [Name] to insert recipient's name)</label>
+                    <textarea 
+                      rows={4}
+                      className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200 resize-none"
+                      value={emailConfig.body}
+                      onChange={(e) => setEmailConfig({ ...emailConfig, body: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Progress and Live List */}
               {(isSendingEmails || emailResult || emailList.some(e => e.status !== 'pending')) && (
-                <div className="bg-white p-5 rounded-xl border shadow-sm transition-all duration-200 flex flex-col gap-4">
+                <div className="bg-black/40 backdrop-blur-3xl p-6 rounded-2xl border border-white/10 shadow-2xl transition-all duration-200 space-y-6">
                   
                   {emailProgress && (
                     <div className="transition-all duration-200">
-                      <div className="flex justify-between text-sm font-medium text-gray-700 mb-2">
-                        <span>Sending email {emailProgress.current} of {emailProgress.total} — {emailProgress.name}</span>
-                        <span>{Math.round((emailProgress.current / emailProgress.total) * 100)}%</span>
+                      <div className="flex justify-between text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">
+                        <span>Dispatching Artifact {emailProgress.current} / {emailProgress.total} — <span className="text-emerald-400">{emailProgress.name}</span></span>
+                        <span className="text-white">{Math.round((emailProgress.current / emailProgress.total) * 100)}%</span>
                       </div>
-                      <div className="w-full bg-gray-100 rounded-full h-2">
+                      <div className="w-full bg-slate-900 rounded-full h-2 shadow-inner ring-1 ring-white/5">
                         <div 
-                          className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                          className="bg-emerald-600 h-2 rounded-full transition-all duration-300 shadow-[0_0_10px_rgba(6,78,59,0.4)]"
                           style={{ width: `${(emailProgress.current / emailProgress.total) * 100}%` }}
                         ></div>
                       </div>
                     </div>
                   )}
 
-                  <div className="border border-gray-100 rounded-lg max-h-64 overflow-y-auto divide-y divide-gray-50 transition-all duration-200 bg-gray-50">
+                  <div className="border border-white/5 rounded-2xl max-h-64 overflow-y-auto divide-y divide-white/5 transition-all duration-200 bg-slate-900/50 shadow-inner custom-scrollbar">
                     {emailList.map(item => (
-                      <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 gap-2 hover:bg-gray-100 transition-colors duration-200">
-                        <div className="flex items-center gap-3">
-                          {item.status === 'pending' && <span className="text-gray-400 font-medium text-sm w-20">⏳ Pending</span>}
-                          {item.status === 'sending' && <span className="text-blue-500 font-medium text-sm w-20 animate-pulse">📤 Sending</span>}
-                          {item.status === 'sent' && <span className="text-green-600 font-medium text-sm w-20 flex items-center gap-1">✅ Sent</span>}
-                          {item.status === 'failed' && <span className="text-red-500 font-medium text-sm w-20">❌ Failed</span>}
+                      <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 gap-2 hover:bg-white/5 transition-colors duration-200">
+                        <div className="flex items-center gap-4">
+                          {item.status === 'pending' && <span className="text-slate-500 font-bold text-[10px] uppercase tracking-wider bg-slate-800 px-2 py-1 rounded">⏳ Pending</span>}
+                          {item.status === 'sending' && <span className="text-emerald-400 font-bold text-[10px] uppercase tracking-wider bg-emerald-500/10 px-2 py-1 rounded animate-pulse">📤 Sending</span>}
+                          {item.status === 'sent' && <span className="text-green-400 font-bold text-[10px] uppercase tracking-wider bg-green-500/10 px-2 py-1 rounded flex items-center gap-1">✅ Delivered</span>}
+                          {item.status === 'failed' && <span className="text-red-400 font-bold text-[10px] uppercase tracking-wider bg-red-500/10 px-2 py-1 rounded">❌ Failed</span>}
                           
                           <div className="flex flex-col">
-                            <span className="font-semibold text-gray-800 text-sm">{item.name}</span>
-                            <span className="text-gray-500 text-xs">{item.email}</span>
+                            <span className="font-bold text-slate-200 text-sm">{item.name}</span>
+                            <span className="text-slate-500 text-xs font-mono">{item.email}</span>
                           </div>
                         </div>
                         <div className="text-right text-xs">
-                           {item.status === 'sent' && item.timestamp && <span className="text-gray-400">{item.timestamp}</span>}
-                           {item.status === 'failed' && item.error && <span className="text-red-500 block max-w-xs truncate" title={item.error}>{item.error}</span>}
+                           {item.status === 'sent' && item.timestamp && <span className="text-slate-500 font-medium">{item.timestamp}</span>}
+                           {item.status === 'failed' && item.error && <span className="text-red-400 font-bold max-w-xs truncate block" title={item.error}>{item.error}</span>}
                         </div>
                       </div>
                     ))}
                   </div>
 
                   {emailResult && (
-                    <div className={`p-4 rounded-lg mt-2 font-medium transition-all duration-500 border ${emailResult.success ? 'bg-green-50 text-green-800 border-green-200' : 'bg-red-50 text-red-800 border-red-200'}`}>
+                    <div className={`p-4 rounded-xl mt-2 font-bold text-center text-sm tracking-wide transition-all duration-500 border ${emailResult.success ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
                       {emailResult.message}
                     </div>
                   )}
@@ -1127,97 +1156,66 @@ export default function App() {
               )}
 
               {/* Action Buttons */}
-              <div className="flex justify-between items-center pt-4 transition-all duration-200">
+              <div className="flex justify-between items-center pt-4 bg-slate-800/30 p-4 rounded-xl border border-white/5">
                 <button 
                   onClick={() => setStep(6)}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg transition-colors duration-200 outline-none"
+                  className="flex items-center gap-2 text-slate-400 hover:text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors duration-200 outline-none"
                 >
-                  <ArrowLeft className="w-4 h-4" /> Skip / Back to Downloads
+                  <ArrowLeft className="w-4 h-4" /> Skip / Back
                 </button>
                 <div className="flex items-center gap-3">
                     {emailResult && (
                       <button 
                         onClick={() => {
                           setStep(1);
-                          // Full reset state code
                           setSpecialFeatures([]); setSpecialMarkers([]); setTemplateFile(null); setTemplatePreview(null);
                           setMarkers([]); setMappings({}); setDataFile(null); setParticipants([]); setResults(null);
                           setCurrentView('dashboard');
                         }}
-                        className="bg-gray-100 text-gray-800 px-6 py-2.5 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-200"
+                        className="bg-slate-700 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-600 transition-all shadow-lg"
                       >
                         Done
                       </button>
                     )}
-                    <button 
+                    <PaperButton 
                       onClick={async () => {
                         setIsSendingEmails(true);
                         setEmailResult(null);
-                        
-                        // Decide which items to process (all pending/failed)
                         const itemsToProcess = emailList.filter(e => e.status === 'pending' || e.status === 'failed');
-                        if (itemsToProcess.length === 0) {
-                          setIsSendingEmails(false);
-                          return;
-                        }
-
+                        if (itemsToProcess.length === 0) { setIsSendingEmails(false); return; }
                         let successes = emailList.filter(e => e.status === 'sent').length;
                         let failures = 0;
-                        let processedThisRun = 0;
-
                         try {
                           for (let i = 0; i < itemsToProcess.length; i++) {
                             const cert = itemsToProcess[i];
-                            
-                            // Mark sending
                             setEmailList(prev => prev.map(p => p.id === cert.id ? { ...p, status: 'sending', error: undefined } : p));
                             setEmailProgress({ current: i + 1, total: itemsToProcess.length, name: cert.name });
-
                             try {
                               const base64Res = await fetch(`/api/certificates/${cert.id}/base64`);
                               if (!base64Res.ok) throw new Error('Failed to fetch certificate PDF');
                               const { base64 } = await base64Res.json();
-                              const pdfBase64Data = base64.split(',')[1] || base64; // Extract actual b64 if URI format
-
+                              const pdfBase64Data = base64.split(',')[1] || base64;
                               const personalizedMsg = emailConfig.body.replace(/\[Name\]/gi, cert.name);
-
-                              await sendCertificateEmail(
-                                emailjsCreds.serviceId, emailjsCreds.templateId, emailjsCreds.publicKey, 
-                                cert.email, cert.name, emailConfig.subject, personalizedMsg, pdfBase64Data
-                              );
-
-                              // Mark sent
+                              await sendCertificateEmail(emailjsCreds.serviceId, emailjsCreds.templateId, emailjsCreds.publicKey, cert.email, cert.name, emailConfig.subject, personalizedMsg, pdfBase64Data);
                               setEmailList(prev => prev.map(p => p.id === cert.id ? { ...p, status: 'sent', timestamp: new Date().toLocaleTimeString() } : p));
                               successes++;
-                              processedThisRun++;
-
-                              // Delay
                               if (i < itemsToProcess.length - 1) await new Promise(r => setTimeout(r, 1000));
                             } catch (err: any) {
-                              console.error(`Failed to send to ${cert.email}:`, err);
                               setEmailList(prev => prev.map(p => p.id === cert.id ? { ...p, status: 'failed', error: err.text || err.message || 'Unknown error' } : p));
                               failures++;
                             }
                           }
-
-                          if (failures > 0) {
-                            setEmailResult({ success: false, message: `Sent ${successes} successfully ✅. ${failures} failed ❌.` });
-                          } else {
-                            setEmailResult({ success: true, message: `All ${successes} certificates sent successfully ✅` });
-                          }
-
+                          if (failures > 0) setEmailResult({ success: false, message: `Batch Incomplete: ${successes} delivered, ${failures} failed.` });
+                          else setEmailResult({ success: true, message: `Mission accomplished: All ${successes} certificates delivered.` });
                         } catch(err: any) {
                           setEmailResult({ success: false, message: err.message });
-                        } finally {
-                          setIsSendingEmails(false);
-                          setEmailProgress(null);
-                        }
+                        } finally { setIsSendingEmails(false); setEmailProgress(null); }
                       }}
                       disabled={isSendingEmails}
-                      className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 outline-none"
-                    >
-                      {isSendingEmails ? 'Sending...' : (emailList.some(e => e.status === 'failed') ? 'Retry Failed' : 'Send Emails')}
-                    </button>
+                      text={isSendingEmails ? 'Dispatching...' : (emailList.some(e => e.status === 'failed') ? 'Retry Failed' : 'Send Emails')}
+                      width={200}
+                      height={50}
+                    />
                 </div>
               </div>
             </div>
@@ -1225,18 +1223,22 @@ export default function App() {
         </div>
       </main>
 
-      {/* Custom Dialogs to avoid iframe blocks */}
+      {/* Custom Dialogs */}
       {confirmDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 text-center">
-            <h3 className="text-xl font-semibold mb-2">{confirmDialog.title}</h3>
-            <p className="text-gray-600 mb-6 whitespace-pre-wrap">{confirmDialog.message}</p>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+          <div className="bg-black/60 backdrop-blur-2xl rounded-3xl shadow-2xl max-w-md w-full p-8 text-center border border-white/10 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
+            <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/20">
+               <FileType className="w-8 h-8 text-emerald-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-3">{confirmDialog.title}</h3>
+            <p className="text-slate-400 mb-8 whitespace-pre-wrap leading-relaxed">{confirmDialog.message}</p>
             <div className="flex justify-center gap-4">
-               <button onClick={confirmDialog.onCancel} className="px-5 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors">
-                 Go Back
+               <button onClick={confirmDialog.onCancel} className="px-6 py-3 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl font-bold text-xs uppercase tracking-widest transition-all">
+                 Cancel
                </button>
-               <button onClick={confirmDialog.onConfirm} className="px-5 py-2.5 bg-red-600 text-white hover:bg-red-700 rounded-lg font-medium transition-colors shadow-sm">
-                 Continue Anyway
+               <button onClick={confirmDialog.onConfirm} className="px-6 py-3 bg-emerald-600 text-white hover:bg-emerald-700 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-emerald-900/40">
+                 Proceed Anyway
                </button>
             </div>
           </div>
@@ -1244,15 +1246,16 @@ export default function App() {
       )}
 
       {errorDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 text-center">
-            <div className="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-red-100 font-bold text-2xl">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+          <div className="bg-black/60 backdrop-blur-2xl rounded-3xl shadow-2xl max-w-md w-full p-8 text-center border border-red-500/20 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+            <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/20 font-black text-red-500 text-3xl">
               !
             </div>
-            <h3 className="text-xl font-semibold mb-2">Notice</h3>
-            <p className="text-gray-600 mb-6 whitespace-pre-wrap">{errorDialog}</p>
-            <button onClick={() => setErrorDialog(null)} className="px-8 py-2.5 bg-gray-900 text-white hover:bg-gray-800 rounded-lg font-medium transition-colors shadow-sm w-full">
-              Dismiss
+            <h3 className="text-2xl font-bold text-white mb-3">Notice</h3>
+            <p className="text-slate-400 mb-8 leading-relaxed">{errorDialog}</p>
+            <button onClick={() => setErrorDialog(null)} className="w-full bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg">
+              Acknowledge
             </button>
           </div>
         </div>

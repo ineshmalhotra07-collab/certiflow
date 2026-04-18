@@ -42,13 +42,13 @@ const FlashlightCard = ({ children, className = '' }: { children: React.ReactNod
       onBlur={handleBlur}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-2xl p-6 flex flex-col justify-between ${className}`}
+      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-black/60 backdrop-blur-2xl shadow-2xl p-6 flex flex-col justify-between ${className}`}
     >
       <div
         className="pointer-events-none absolute -inset-px opacity-0 transition duration-300 z-10"
         style={{
           opacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(59, 130, 246, 0.15), transparent 40%)`,
+          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(16, 185, 129, 0.15), transparent 40%)`,
         }}
       />
       <div
@@ -87,27 +87,27 @@ export const LandingPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStart
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="text-center mt-24 mb-32"
       >
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm mb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm mb-6">
           <Zap className="w-4 h-4" />
-          <span>Certiflow V2 Core Release</span>
+          <span>Certiflow V2.1 Network Active</span>
         </div>
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6">
-          Certificates <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Accelerated.</span>
+          Certificates <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-600">Accelerated.</span>
         </h1>
         <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
           The premium paperless infrastructure designed for institutions. Secure rendering, precise typography, bulk orchestration, natively.
         </p>
         
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          <button 
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
+          <PaperButton 
             onClick={onGetStarted}
-            className="relative group bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-medium text-lg transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_20px_rgba(37,99,235,0.4)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_12px_25px_rgba(37,99,235,0.5)] active:shadow-[inset_0_4px_8px_rgba(0,0,0,0.3),0_2px_4px_rgba(37,99,235,0.3)] active:translate-y-[2px]"
-          >
-            Launch Generator Workspace
-          </button>
+            text="Launch Generator Workspace"
+            width={280}
+            height={80}
+          />
           
-          <div className="ml-0 sm:ml-4 flex items-center justify-center" title="Try double clicking to fold!">
-             <PaperButton onClick={() => {}} text="INTERACTIVE PAPER" />
+          <div className="hidden sm:flex items-center justify-center opacity-70 scale-90" title="Try double clicking to fold!">
+             <PaperButton onClick={() => {}} text="DEMO TEXTURE" />
           </div>
         </div>
       </motion.div>
@@ -125,7 +125,7 @@ export const LandingPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStart
            whileInView={{ scaleX: 1 }}
            viewport={{ once: true }}
            transition={{ duration: 1.5, ease: "easeInOut" }}
-           className="absolute -top-10 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500 to-transparent origin-left"
+           className="absolute -top-10 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent origin-left"
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[220px]">
@@ -139,8 +139,8 @@ export const LandingPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStart
               className={feat.span}
             >
               <FlashlightCard className="h-full">
-                <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-6 border border-blue-500/20">
-                  <feat.icon className="text-blue-400 w-6 h-6" />
+                <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-6 border border-white/10 group-hover:border-emerald-500 transition-colors">
+                  <feat.icon className="text-emerald-400 w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-white mb-2">{feat.title}</h3>
